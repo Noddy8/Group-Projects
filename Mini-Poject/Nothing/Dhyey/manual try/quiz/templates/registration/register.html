@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="{% static 'css/register css.css' %}" />
+  </head>
+  <body>
+    <div class="registration-container">
+      <h2>Register to QuizBOT</h2>
+
+      <div>
+        {% for message in messages %}
+        <h5 class="text-danger">{{message}}</h5>
+        {% endfor %}
+      </div>
+
+      <form method="POST" action="" class="registration-form">
+        {% csrf_token %}
+        <input type="text" name="full_name" placeholder="Username" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password1" placeholder="Password" required />
+        <input type="password" name="password2" placeholder="Confirm Password" required />
+        <input type="submit" name="submit" value="Register" />
+        <span>Already have an Account? <a href="/login/">Login</a></span>
+      </form>
+    </div>
+  </body>
+</html>
