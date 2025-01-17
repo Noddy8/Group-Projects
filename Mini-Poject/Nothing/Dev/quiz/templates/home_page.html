@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <h2>Welcome, {{ user.username }}!</h2>
+    <form action="/create_quiz/" method="get">
+        {% csrf_token %}
+        <button type="submit">create_quiz</button>
+    </form>
+
+    <form action="/logout/" method="post">
+        {% csrf_token %}
+        <button type="submit">logout</button>
+    </form>
+
+</body>
+</html>

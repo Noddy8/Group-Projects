@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Form</title>
+    <link rel="stylesheet" href="{% static '/css/login.css' %} " />
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>Login to QuizBOT</h2>
+      <form class="login-form" method="post">
+        {% csrf_token %}
+        <!-- <input type="text" placeholder="Username" name="{{ form.username }}"  required /> -->
+        <input type="text"  name="{{ form.username.name }}"  placeholder="Username" required />
+        <!-- {{ form.username }} -->
+        <input type="password" name="{{ form.password.name }}"  placeholder="Password" required />
+
+        {% if form.errors %}
+          <div class="errors">
+                  {% for field, errors in form.errors.items %}
+                      {% for error in errors %}
+                          <!-- <p>{{ error }}</p> -->
+                           <p>Username or Password is incorrect</p>
+                      {% endfor %}
+                  {% endfor %}
+          </div>
+      {% endif %}
+
+        <input type="submit" value="Login" />
+        <span
+          >Don't have an Account?
+          <a href="/signup/">Register</a></span
+        >
+      </form>
+    </div>
+  </body>
+</html>
