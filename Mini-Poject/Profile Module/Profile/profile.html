@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile | QuizBOT</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
+
+      :root {
+        --foreground: #203de0;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(0deg, #203de0 0%, #ffffff 99%);
+      }
+
+      .profile-container {
+        min-width: 333px;
+        background-color: #fff;
+        padding: 1em;
+        border-radius: 0.5em;
+        text-align: center;
+      }
+
+      .profile-header h2 {
+        margin: 0;
+        padding: 0.5em;
+        color: var(--foreground);
+        border-bottom: 1px solid #ccc;
+      }
+      .image-box {
+        position: relative;
+      }
+
+      .image-box .profile-image {
+        max-width: 12em;
+        max-height: 12em;
+        border-radius: 50%;
+        margin: 1em 0em;
+      }
+      .image-box .profile-edit-icon {
+        width: 1.5em;
+        position: absolute;
+        bottom: 21%;
+        right: 21%;
+        cursor: pointer;
+      }
+
+      .profile-content p {
+        color: #444;
+        margin: 0.5em 0em;
+      }
+      .profile-content button {
+        margin: 1em 0em;
+        padding: 0.6em 1.2em;
+        border-radius: 0.5em;
+        transition: 0.3s ease;
+        background: transparent;
+        color: var(--foreground);
+        border: 1px solid var(--foreground);
+      }
+      .profile-content button:hover {
+        color: #fff;
+        background-color: var(--foreground);
+      }
+
+      /* ===== PASSWORD CHANGE BOX POPUP ===== */
+      /* ===== ========================= ===== */
+      .password-container {
+        padding: 1em;
+        min-width: 333px;
+        /* text-align: center; */
+        border-radius: 0.5em;
+        background-color: #fff;
+        border: 1px solid #555;
+        /* ---------------------------------- */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.1);
+        transition: 0.5s ease;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 200;
+      }
+      .password-container.active {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      .pw-change-box h2 {
+        /* margin-top: .5em; */
+        color: var(--foreground);
+        /* font-size: 1.8em; */
+      }
+      .pw-change-box .fa-solid {
+        position: absolute;
+        top: 0;
+        right: 0;
+        /* padding: 13px 8px; */
+        margin: 20px;
+        border-radius: 25%;
+        cursor: pointer;
+        color: var(--foreground);
+      }
+      .pw-change-box p {
+        color: #555;
+        font-size: 0.8em;
+        margin-bottom: 1em;
+      }
+      .pw-change-box input {
+        color: #555;
+        outline: none;
+        margin: 0.8em 0em;
+        padding: 0.5em 0.8em;
+        border-radius: 0.5em;
+        border: 1px solid #555;
+        width: 100%;
+        font-size: 1em;
+      }
+      .pw-change-box button {
+        outline: none;
+        border: 1px solid var(--foreground);
+        border-radius: 0.5em;
+        font-size: 1em;
+        margin: 0.8em 0em;
+        padding: 0.5em 0.8em;
+        background: transparent;
+        color: var(--foreground);
+        transition: 0.3s ease;
+      }
+      .pw-change-box button:hover {
+        background: var(--foreground);
+        color: #fff;
+      }
+
+      input:focus {
+        border: 1px solid var(--foreground);
+      }
+      .username-div p {
+        margin: 0;
+      }
+      .username-div input {
+        margin: 0;
+      }
+      .pw-change-box .fname {
+        width: 49%;
+        margin-right: 0.6%;
+      }
+      .pw-change-box .lname {
+        width: 49%;
+        margin-left: 0.6%;
+      }
+      /*===== Overlay styles ===== */
+      /* ======= ========= ======= */
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 1);
+        /* Semi-transparent background */
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+      }
+
+      .overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      /*===== media Queries ===== */
+      /* ======= ========= ======= */
+
+      @media (max-width: 1000px) {
+        .pw-change-box .fname {
+          width: 100%;
+          margin-right: 0%;
+        }
+        .pw-change-box .lname {
+          width: 100%;
+          margin-left: 0%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay" id="overlay"></div>
+    <div class="profile-container">
+      <div class="profile-header">
+        <h2>Profile Page</h2>
+      </div>
+      <div class="profile-content">
+        <p>Teacher's Account</p>
+        <!-- <p>Student's Account</p> -->
+        <div class="image-box">
+          <img src="profile.png" alt="Profile Image" class="profile-image" />
+          <img
+            onclick="changedProfileImage()"
+            class="profile-edit-icon"
+            src="edit-icon.png"
+          />
+        </div>
+        <div class="name-box">
+          <h3 id="name-display">Fname Lname</h3>
+        </div>
+        <p id="username-display">@username</p>
+        <button id="signupBtn">UPDATE Information</button>
+      </div>
+    </div>
+    <!-- =================================================== -->
+    <div class="password-container" id="signupPopup">
+      <div class="pw-change-box">
+        <h2>Change Information</h2>
+        <p>You can update those fields which You want to update</p>
+        <i class="fa-solid fa-xmark" id="closeSignupPopup"></i>
+        <div class="username-div">
+          <input
+            type="text"
+            name="username"
+            id="username"
+            value="@username"
+            readonly
+          />
+          <p class="username-note">You can't change username</p>
+        </div>
+        <input
+          type="text"
+          name="fname"
+          id="fname"
+          class="fname"
+          placeholder="Enter First name"
+        />
+        <input
+          type="text"
+          name="lname"
+          id="lname"
+          class="lname"
+          placeholder="Enter Last name"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter new Password"
+        />
+        <br />
+        <input
+          type="password"
+          name="confirm-password"
+          placeholder="Confirm new Password"
+        />
+        <br />
+        <button onclick="changedPW()">save</button>
+      </div>
+    </div>
+
+    <!-- ====== ======== ====== -->
+    <!-- ===== JavaScript ===== -->
+    <!-- ====== ======== ====== -->
+
+    <script>
+      const closeBtn = document.querySelector(".fa-xmark");
+      const signupBtn = document.querySelector("#signupBtn");
+      const signupPopup = document.querySelector("#signupPopup");
+      const closeSignupPopup = document.querySelector("#closeSignupPopup");
+      const overlay = document.querySelector("#overlay");
+
+      // Open popup and show overlay
+      signupBtn.addEventListener("click", () => {
+        signupPopup.classList.add("active");
+        overlay.classList.add("active");
+      });
+
+      // Close popup and hide overlay
+      closeSignupPopup.addEventListener("click", () => {
+        signupPopup.classList.remove("active");
+        overlay.classList.remove("active");
+      });
+
+      function changedPW() {
+        alert("Information changed!");
+        signupPopup.classList.remove("active");
+        overlay.classList.remove("active");
+      }
+      function changedProfileImage() {
+        alert("Browse to change image!");
+      }
+    </script>
+  </body>
+</html>
